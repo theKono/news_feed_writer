@@ -36,3 +36,6 @@ SQS_QUEUE_URL="https://sqs.ap-southeast-1.amazonaws.com/xxx/test-sqs-queue" \
 PARALLEL=10 \
 main
 ```
+
+### Stop
+Send `ctrl-c` signal to the executable, it will stop gracefully.
