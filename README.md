@@ -5,7 +5,7 @@ It is a microservice Kono used to create news feed to users. The microservice ke
 ## Installation
 - The project is tested against Go 1.6
 - `GOPATH` should be set properly
-- The dependencies is commited into `vendor/`, there should be no worry to dependency problem.
+- The dependencies is committed into `vendor/`, there should be no worry to dependency problem.
 
 ### Configuration
 - Required
@@ -39,3 +39,12 @@ main
 
 ### Stop
 Send `ctrl-c` signal to the executable, it will stop gracefully.
+
+### Deploy
+```
+cd deploy
+./deploy <deployment-group> <app-version> <s3-bucket>
+```
+- `deployment-group`: AWS CodeDeploy deployment-group
+- `app-version`: git tag version
+- `s3-bucket`: The deploying instance region
