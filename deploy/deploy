@@ -5,15 +5,14 @@
 #
 # ARGV
 #
-if [[ $# -ne 4 ]]; then
-    echo "usage: $0 <deployment-group> <app-version> <config-path> <s3-bucket>"
+if [[ $# -ne 3 ]]; then
+    echo "usage: $0 <deployment-group> <app-version> <s3-bucket>"
     exit 1
 fi
 
 deployment_group=$1
 version=$2
-config=$3
-bucket=$4
+bucket=$3
 program=news-feed-writer
 
 if [[ $deployment_group == "Staging" ]]; then
