@@ -31,7 +31,7 @@ apt-get install -y supervisor git make build-essential python-dev ntp
 apt-get install -y python-pip ruby2.0
 pip install awscli
 cd /home/ubuntu
-aws s3 cp s3://aws-codedeploy-$region/latest/install . --region $region
+wget https://aws-codedeploy-$region.s3.amazonaws.com/latest/install
 chmod +x ./install
 ./install auto
 rm ./install
