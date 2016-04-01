@@ -31,6 +31,11 @@ tar xf $bundle
 rm $bundle
 
 #
+# Build
+#
+go build -o $folder/worker $folder/main/*.go || { echo "Compile error"; exit 1; }
+
+#
 # Prepare stuffs for AWS CodeDeploy
 #
 cp appspec.yml.tmpl $folder/appspec.yml
