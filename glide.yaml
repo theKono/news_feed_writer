@@ -1,0 +1,6 @@
+package: github.com/theKono/orchid
+version: ""
+import:
+- package: github.com/spf13/viper
+- package: github.com/aws/aws-sdk-go
+- package: github.com/jinzhu/gorm
