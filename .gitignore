@@ -25,3 +25,4 @@ _testmain.go
 
 Makefile
 deploy/setup-instance/*.conf
+vendor
