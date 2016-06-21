@@ -22,6 +22,9 @@ _testmain.go
 *.exe
 *.test
 *.prof
+*.swp
 
 Makefile
 deploy/setup-instance/*.conf
+vendor
+cmd/newsfeed/newsfeed-worker

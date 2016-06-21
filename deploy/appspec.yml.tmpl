@@ -1,9 +1,0 @@
-version: 0.0
-os: linux
-files:
-  - source: /
-    destination: /srv/{{program}}/release/{{tag}}
-hooks:
-  AfterInstall:
-    - location: deploy/after_install.sh
-      timeout: 300
