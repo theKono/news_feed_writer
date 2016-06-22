@@ -12,32 +12,32 @@ import (
 	"github.com/theKono/orchid/sqs"
 )
 
-// consumeNewsFeedMessage is the a NewsFeed consumer.
+// consumeNotificationMessage is the a Notification consumer.
 //
 // It deletes the SQS message regardless of its validity. If it is a
-// valid message, then it will insert the NewsFeed both into MySQL and
+// valid message, then it will insert the Notification both into MySQL and
 // DynamoDB.
-var consumeNewsFeedMessage = func(message *awsSqs.Message) error {
+var consumeNotificationMessage = func(message *awsSqs.Message) error {
 	var (
-		newsFeed *messagejson.NewsFeed
-		record   *mysql.NewsFeed
+		newsFeed *messagejson.Notification
+		record   *mysql.Notification
 		doc      *dynamodb.PutItemInput
 		err      error
 	)
 
 	defer sqs.DeleteMessage(message)
 
-	if newsFeed, err = messagejson.NewNewsFeed(message.Body); err != nil {
+	if newsFeed, err = messagejson.NewNotification(message.Body); err != nil {
 		log.Println("Cannot parse news feed message\n", err)
 		return err
 	}
 
-	if record, err = mysql.NewNewsFeed(newsFeed); err != nil {
+	if record, err = mysql.NewNotification(newsFeed); err != nil {
 		log.Println("Cannot create news feed model\n", err)
 		return err
 	}
 
-	if doc, err = dynamo.NewNewsFeed(newsFeed); err != nil {
+	if doc, err = dynamo.NewNotification(newsFeed); err != nil {
 		log.Println("Cannot create news feed dynamodb model\n", err)
 		return err
 	}
@@ -53,9 +53,9 @@ var consumeNewsFeedMessage = func(message *awsSqs.Message) error {
 	return nil
 }
 
-// ConsumeNewsFeed is a function that implements MessageConsumer
+// ConsumeNotification is a function that implements MessageConsumer
 // interface.
 //
-// It is derived from consumeNewsFeedMessage decorated by
+// It is derived from consumeNotificationMessage decorated by
 // DecorateConsumeFn.
-var ConsumeNewsFeed = DecorateConsumeFn(consumeNewsFeedMessage)
+var ConsumeNotification = DecorateConsumeFn(consumeNotificationMessage)
