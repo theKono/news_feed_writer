@@ -26,14 +26,16 @@ func TestNewsFeed_Shard(t *testing.T) {
 
 func TestNewNewsFeed(t *testing.T) {
 	input := &messagejson.NewsFeed{
-		ID:             rand.Int63(),
-		UserID:         rand.Int31(),
-		ObservableType: "ot",
-		ObservableID:   "oi",
-		EventType:      "et",
-		TargetType:     "tt",
-		TargetID:       "ti",
-		Summary:        "s",
+		messagejson.SocialFeed{
+			ID:             rand.Int63(),
+			UserID:         rand.Int31(),
+			ObservableType: "ot",
+			ObservableID:   "oi",
+			EventType:      "et",
+			TargetType:     "tt",
+			TargetID:       "ti",
+			Summary:        "s",
+		},
 	}
 	output, _ := NewNewsFeed(input)
 	table := [][]interface{}{
