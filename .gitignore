@@ -28,3 +28,4 @@ Makefile
 deploy/setup-instance/*.conf
 vendor
 cmd/newsfeed/newsfeed-worker
+cmd/notification/notification-worker
