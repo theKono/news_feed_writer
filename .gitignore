@@ -27,5 +27,6 @@ _testmain.go
 Makefile
 deploy/setup-instance/*.conf
 vendor
+bin
 cmd/newsfeed/newsfeed-worker
 cmd/notification/notification-worker
