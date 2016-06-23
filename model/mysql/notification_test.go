@@ -9,23 +9,23 @@ import (
 	"github.com/theKono/orchid/model/messagejson"
 )
 
-func TestNewsFeed_Shard(t *testing.T) {
-	nf := &NewsFeed{}
+func TestNotification_Shard(t *testing.T) {
+	n := &Notification{}
 
 	// When Kid is an even
-	nf.Kid = 2
-	if nf.Shard() != 0 {
-		t.Fatalf("Expect Shard() to be 0, but got `%v`", nf.Shard())
+	n.Kid = 2
+	if n.Shard() != 0 {
+		t.Fatalf("Expect Shard() to be 0, but got `%v`", n.Shard())
 	}
 
-	nf.Kid = 1
-	if nf.Shard() != 1 {
-		t.Fatalf("Expect Shard() to be 1, but got `%v`", nf.Shard())
+	n.Kid = 1
+	if n.Shard() != 1 {
+		t.Fatalf("Expect Shard() to be 1, but got `%v`", n.Shard())
 	}
 }
 
-func TestNewNewsFeed(t *testing.T) {
-	input := &messagejson.NewsFeed{
+func TestNewNotification(t *testing.T) {
+	input := &messagejson.Notification{
 		messagejson.SocialFeed{
 			ID:             rand.Int63(),
 			UserID:         rand.Int31(),
@@ -37,9 +37,9 @@ func TestNewNewsFeed(t *testing.T) {
 			Summary:        "s",
 		},
 	}
-	output, _ := NewNewsFeed(input)
+	output, _ := NewNotification(input)
 	table := [][]interface{}{
-		[]interface{}{"NewsfeedID", input.ID, output.NewsfeedID},
+		[]interface{}{"NotificationID", input.ID, output.NotificationID},
 		[]interface{}{"Kid", input.UserID, output.Kid},
 		[]interface{}{"ObservableType", input.ObservableType, output.ObservableType},
 		[]interface{}{"ObservableID", input.ObservableID, output.ObservableID},

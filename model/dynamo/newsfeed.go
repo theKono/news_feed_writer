@@ -1,3 +1,5 @@
+// +build newsfeed
+
 package dynamo
 
 import (
@@ -11,11 +13,11 @@ import (
 	"github.com/theKono/orchid/model/messagejson"
 )
 
-var tableName string
+var newsFeedTableName string
 
 func init() {
-	tableName = cfg.DynamoDBNewsFeedTableName
-	if tableName == "" {
+	newsFeedTableName = cfg.DynamoDBNewsFeedTableName
+	if newsFeedTableName == "" {
 		log.Fatalln("NewsFeed dynamodb table name is required")
 	}
 }
@@ -24,7 +26,7 @@ func init() {
 // messagejson.NewsFeed instance.
 var NewNewsFeed = func(nf *messagejson.NewsFeed) (p *dynamodb.PutItemInput, err error) {
 	p = &dynamodb.PutItemInput{
-		TableName: &tableName,
+		TableName: &newsFeedTableName,
 		Item: map[string]*dynamodb.AttributeValue{
 			"id": &dynamodb.AttributeValue{
 				N: aws.String(fmt.Sprint(nf.ID)),

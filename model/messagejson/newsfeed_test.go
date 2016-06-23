@@ -10,7 +10,7 @@ import (
 
 func TestNewsFeed_ValidateID(t *testing.T) {
 	// When ID is not zero
-	nf := &NewsFeed{ID: 1}
+	nf := &NewsFeed{SocialFeed{ID: 1}}
 	if err := nf.ValidateID(); err != nil {
 		t.Fatal("Expect ValidateID() not to be an error\n", err)
 	}
@@ -24,7 +24,7 @@ func TestNewsFeed_ValidateID(t *testing.T) {
 
 func TestNewsFeed_ValidateUserID(t *testing.T) {
 	// When UserID is not zero
-	nf := &NewsFeed{UserID: 1}
+	nf := &NewsFeed{SocialFeed{UserID: 1}}
 	if err := nf.ValidateUserID(); err != nil {
 		t.Fatal("Expect ValidateUserID() not to be an error\n", err)
 	}
@@ -38,7 +38,7 @@ func TestNewsFeed_ValidateUserID(t *testing.T) {
 
 func TestNewsFeed_ValidateSummary(t *testing.T) {
 	// When Summary is not a JSON
-	nf := &NewsFeed{Summary: "[[]"}
+	nf := &NewsFeed{SocialFeed{Summary: "[[]"}}
 	if err := nf.ValidateSummary(); err == nil {
 		t.Fatal("Expect ValidateSummary() to be an error")
 	}
@@ -64,15 +64,15 @@ func TestNewsFeed_ValidateSummary(t *testing.T) {
 
 func TestNewsFeed_GenerateID(t *testing.T) {
 	// When summary is a bad JSON
-	nf := &NewsFeed{Summary: "["}
+	nf := &NewsFeed{SocialFeed{Summary: "["}}
 	if nf.GenerateID() == nil {
 		t.Fatal("Expect GenerateID() to return error")
 	}
 
-	nf = &NewsFeed{Summary: "{}"}
+	nf = &NewsFeed{SocialFeed{Summary: `{"key": 1000000000}`}}
 	nf.GenerateID()
 
-	if nf.Summary != fmt.Sprintf(`{"id":"%v"}`, nf.ID) {
+	if nf.Summary != fmt.Sprintf(`{"id":"%v","key":1000000000}`, nf.ID) {
 		t.Fatal("Summary is bad\n", nf.Summary)
 	}
 }

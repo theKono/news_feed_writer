@@ -20,7 +20,9 @@ func TestInsertIntoMysql(t *testing.T) {
 	var mjNewsFeed *messagejson.NewsFeed
 	var record = mysql.NewsFeed{}
 
-	mjNewsFeed = &messagejson.NewsFeed{UserID: 2, Summary: "{}"}
+	mjNewsFeed = &messagejson.NewsFeed{
+		messagejson.SocialFeed{UserID: 2, Summary: "{}"},
+	}
 	mjNewsFeed.GenerateID()
 	msNewsFeed, _ = mysql.NewNewsFeed(mjNewsFeed)
 	if err := insertIntoMysql(msNewsFeed); err != nil {
@@ -34,7 +36,9 @@ func TestInsertIntoMysql(t *testing.T) {
 		mysql.DBSessions[0].Delete(&record)
 	}
 
-	mjNewsFeed = &messagejson.NewsFeed{UserID: 1, Summary: "{}"}
+	mjNewsFeed = &messagejson.NewsFeed{
+		messagejson.SocialFeed{UserID: 1, Summary: "{}"},
+	}
 	mjNewsFeed.GenerateID()
 	msNewsFeed, _ = mysql.NewNewsFeed(mjNewsFeed)
 	if err := insertIntoMysql(msNewsFeed); err != nil {
@@ -50,7 +54,9 @@ func TestInsertIntoMysql(t *testing.T) {
 }
 
 func TestInsertIntoDynamoDB(t *testing.T) {
-	mjNewsFeed := &messagejson.NewsFeed{UserID: rand.Int31(), Summary: "{}"}
+	mjNewsFeed := &messagejson.NewsFeed{
+		messagejson.SocialFeed{UserID: rand.Int31(), Summary: "{}"},
+	}
 	mjNewsFeed.GenerateID()
 
 	pii, err := dynamo.NewNewsFeed(mjNewsFeed)
