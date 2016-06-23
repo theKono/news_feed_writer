@@ -69,10 +69,10 @@ func TestNewsFeed_GenerateID(t *testing.T) {
 		t.Fatal("Expect GenerateID() to return error")
 	}
 
-	nf = &NewsFeed{SocialFeed{Summary: "{}"}}
+	nf = &NewsFeed{SocialFeed{Summary: `{"key": 1000000000}`}}
 	nf.GenerateID()
 
-	if nf.Summary != fmt.Sprintf(`{"id":"%v"}`, nf.ID) {
+	if nf.Summary != fmt.Sprintf(`{"id":"%v","key":1000000000}`, nf.ID) {
 		t.Fatal("Summary is bad\n", nf.Summary)
 	}
 }

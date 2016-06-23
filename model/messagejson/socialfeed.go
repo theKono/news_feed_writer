@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/theKono/orchid/util"
 )
@@ -35,7 +36,9 @@ func (sf *SocialFeed) GenerateID() error {
 	var jsonStr []byte
 	var err error
 
-	if err = json.Unmarshal([]byte(sf.Summary), &summary); err != nil {
+	decoder := json.NewDecoder(strings.NewReader(sf.Summary))
+	decoder.UseNumber()
+	if err := decoder.Decode(&summary); err != nil {
 		return errors.New("Summary is a bad json")
 	}
 
