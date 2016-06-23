@@ -1,3 +1,5 @@
+// +build notification
+
 package mysql
 
 import (

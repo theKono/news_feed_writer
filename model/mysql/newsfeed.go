@@ -1,3 +1,5 @@
+// +build newsfeed
+
 package mysql
 
 import (
@@ -5,9 +7,6 @@ import (
 
 	"github.com/theKono/orchid/model/messagejson"
 )
-
-// UnseenAndUnread is the default value for NewsFeed.State.
-const UnseenAndUnread = 0
 
 // NewsFeed is an ORM for newsfeeds table.
 type NewsFeed struct {

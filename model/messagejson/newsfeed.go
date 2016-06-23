@@ -1,3 +1,5 @@
+// +build newsfeed
+
 package messagejson
 
 import (
