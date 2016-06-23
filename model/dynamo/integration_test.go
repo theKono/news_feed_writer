@@ -71,3 +71,33 @@ func TestNewNotification(t *testing.T) {
 		t.Fatal("Expect DeleteItem not to return error\n", err)
 	}
 }
+
+func TestNewTimeline(t *testing.T) {
+	n := &messagejson.Timeline{
+		messagejson.SocialFeed{UserID: rand.Int31(), Summary: "{}"},
+	}
+	n.GenerateID()
+
+	pii, err := NewTimeline(n)
+	if err != nil {
+		t.Fatal("Expect NewTimeline() not to return error\n", err)
+	}
+
+	_, err = DynamoDBService.PutItem(pii)
+	if err != nil {
+		t.Fatal("Expect PutItem() not to return error\n", err)
+	}
+
+	_, err = DynamoDBService.DeleteItem(
+		&dynamodb.DeleteItemInput{
+			TableName: &timelineTableName,
+			Key: map[string]*dynamodb.AttributeValue{
+				"user_id": &dynamodb.AttributeValue{N: aws.String(fmt.Sprint(n.UserID))},
+				"id":      &dynamodb.AttributeValue{N: aws.String(fmt.Sprint(n.ID))},
+			},
+		},
+	)
+	if err != nil {
+		t.Fatal("Expect DeleteItem not to return error\n", err)
+	}
+}

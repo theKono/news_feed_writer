@@ -20,6 +20,7 @@ func init() {
 	DynamoDBRegion = viper.GetString("DYNAMODB_REGION")
 	DynamoDBNewsFeedTableName = viper.GetString("DYNAMODB_NEWS_FEED_TABLE")
 	DynamoDBNotificationTableName = viper.GetString("DYNAMODB_NOTIFICATION_TABLE")
+	DynamoDBTimelineTableName = viper.GetString("DYNAMODB_TIMELINE_TABLE")
 }
 
 // Parallel specifies the number of consumers at the same time.
@@ -51,3 +52,6 @@ var DynamoDBNewsFeedTableName string
 
 // DynamoDBNotificationTableName specifies the table name of Notification document.
 var DynamoDBNotificationTableName string
+
+// DynamoDBTimelineTableName specifies the table name of Timeline document.
+var DynamoDBTimelineTableName string
