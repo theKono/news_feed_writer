@@ -1,3 +1,7 @@
+1.0.0 / 2016-06-24
+------------------
+* Rewrite from scratch. Aiming to consume NewsFeed, Notification, Timeline messages.
+
 0.1.1 / 2016-04-01
 ------------------
 * Fix bugs in deploy scripts
