@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# After application is copied to final destination folder
+
+if [[ "$DEPLOYMENT_GROUP_NAME" == "Development" ]]; then
+    name=notification-writer-dev
+    supervisor_prog=notification-writer-dev
+else
+    name=notification-writer
+    supervisor_prog=notification-writer
+fi
+
+new_release_dir=/srv/$name/release/{{tag}}
+
+cd $new_release_dir
+rm /srv/$name/current -f
+ln -s $new_release_dir /srv/$name/current
+supervisorctl restart $supervisor_prog

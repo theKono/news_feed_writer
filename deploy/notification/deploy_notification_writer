@@ -1,0 +1,69 @@
+#!/bin/bash
+#
+# Deploy script
+set -e
+set -o pipefail
+
+#
+# ARGV
+#
+if [[ $# -ne 3 ]]; then
+    echo "usage: $0 <deployment-group> <app-version> <s3-bucket>"
+    exit 1
+fi
+
+deployment_group=$1
+version=$2
+bucket=$3
+program=notification-writer
+
+if [[ $deployment_group == "Development" ]]; then
+    program=notification-writer-dev
+fi
+
+#
+# Download code
+#
+repository=orchid
+bundle=$version.tar.gz
+src_folder="$repository-$version"
+deploy_folder="deploy-$version"
+
+wget https://github.com/theKono/$repository/archive/$bundle
+tar xf $bundle
+rm $bundle
+mkdir -p $deploy_folder
+
+#
+# Build
+#
+go build -v -o $deploy_folder/worker -tags "notification" $src_folder/cmd/notification/main.go || { echo "Compile error"; exit 1; }
+
+#
+# Prepare stuffs for AWS CodeDeploy
+#
+cp appspec.yml.tmpl $deploy_folder/appspec.yml
+cp after_install.sh.tmpl $deploy_folder/after_install.sh
+sed -i "s/{{tag}}/$version/" $deploy_folder/appspec.yml $deploy_folder/after_install.sh
+sed -i "s/{{program}}/$program/" $deploy_folder/appspec.yml
+
+#
+# Archive and upload to S3
+#
+revision=$version.tgz
+key=notification/$revision
+
+tar zcvf $revision -C $deploy_folder .
+aws s3 cp $revision s3://$bucket/$key
+rm -rf $src_folder $deploy_folder $revision
+
+#
+# Deploy
+#
+aws deploy create-deployment \
+  --region us-east-1 \
+  --application-name NotificationWriter \
+  --deployment-group-name $deployment_group \
+  --deployment-config-name CodeDeployDefault.OneAtATime \
+  --description $version \
+  --s3-location bucket=$bucket,bundleType=tgz,key=$key
