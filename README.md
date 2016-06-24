@@ -8,10 +8,10 @@ It is a microservice Kono used to create news feed, notifications, timeline unit
 - Use [glide](https://github.com/Masterminds/glide) to manage vendor packages. Please see the glide's installation guide.
     - After installing glide, `glide install` should be good to go.
 
-### Configuration
+## Configuration
 Orchid uses configuration from environment variables. All environment variables start with `ORCHID_` prefix. We list the required and optional environment variable for each executable.
 
-#### bin/newsfeed-writer
+### bin/newsfeed-writer
 - `ORCHID_MYSQL_MAIN`
     - The first MySQL database shard. The news feed record will be inserted into the `newsfeeds` table of the database. It conforms to GO's MySQL specific data source name.
     - E.g. `user:password@tcp(locahost:3306)/database?charset=utf8&parseTime=True&loc=Local`
@@ -31,7 +31,7 @@ Orchid uses configuration from environment variables. All environment variables 
 - `ORCHID_MYSQL_DEBUG` (optional)
     - To log advanced MySQL statment for debugging, set it to `1`.
 
-#### bin/notification-writer
+### bin/notification-writer
 - `ORCHID_MYSQL_MAIN`
     - The first MySQL database shard. The notification record will be inserted into the `notifications` table of the database. It conforms to GO's MySQL specific data source name.
     - E.g. `user:password@tcp(locahost:3306)/database?charset=utf8&parseTime=True&loc=Local`
@@ -51,7 +51,7 @@ Orchid uses configuration from environment variables. All environment variables 
 - `ORCHID_MYSQL_DEBUG` (optional)
     - To log advanced MySQL statment for debugging, set it to `1`.
 
-#### bin/timeline-writer
+### bin/timeline-writer
 - `ORCHID_MYSQL_MAIN`
     - The first MySQL database shard. The timeline record will be inserted into the `timelines` table of the database. It conforms to GO's MySQL specific data source name.
     - E.g. `user:password@tcp(locahost:3306)/database?charset=utf8&parseTime=True&loc=Local`
@@ -71,7 +71,7 @@ Orchid uses configuration from environment variables. All environment variables 
 - `ORCHID_MYSQL_DEBUG` (optional)
     - To log advanced MySQL statment for debugging, set it to `1`.
 
-### Unit Test
+## Unit Test
 ```bash
 ORCHID_MYSQL_MAIN=... \
 ORCHID_MYSQL_SHARD=... \
@@ -84,7 +84,7 @@ ORCHID_SQS_QUEUE_URL=... \
 go test -v -cover -tags "unit newsfeed notification timeline"
 ```
 
-### Integration Test
+## Integration Test
 ```bash
 ORCHID_MYSQL_MAIN=... \
 ORCHID_MYSQL_SHARD=... \
@@ -97,11 +97,11 @@ ORCHID_SQS_QUEUE_URL=... \
 go test -v -cover -tags "integration newsfeed notification timeline"
 ```
 
-### Stop
+## Stop
 Send `ctrl-c` signal to the executable, it will stop until all received messages are consumed.
 
-### Deploy
-#### Deploy NewsFeed writer
+## Deploy
+### Deploy NewsFeed writer
 ```
 cd deploy/newsfeed
 ./deploy_news_feed_writer <deployment-group> <app-version> <s3-bucket>
@@ -110,7 +110,7 @@ cd deploy/newsfeed
 - `app-version`: git tag version
 - `s3-bucket`: The deploying instance region
 
-#### Deploy Notification writer
+### Deploy Notification writer
 ```
 cd deploy/notification
 ./deploy_notification_writer <deployment-group> <app-version> <s3-bucket>
@@ -119,7 +119,7 @@ cd deploy/notification
 - `app-version`: git tag version
 - `s3-bucket`: The deploying instance region
 
-#### Deploy Timeline writer
+### Deploy Timeline writer
 ```
 cd deploy/timeline
 ./deploy_timeline_writer <deployment-group> <app-version> <s3-bucket>
