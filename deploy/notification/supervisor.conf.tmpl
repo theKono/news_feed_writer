@@ -1,0 +1,19 @@
+[program:notification-writer]
+command=/srv/notification-writer/current/worker
+numprocs=1
+autostart=true
+autorestart=true
+stopsignal=TERM
+stopwaitsecs=300
+user=ubuntu
+stdout_logfile=/srv/notification-writer/share/supervisor.out.log
+stderr_logfile=/srv/notification-writer/share/supervisor.err.log
+environment=
+    ORCHID_MYSQL_MAIN="",
+    ORCHID_MYSQL_SHARD="",
+    ORCHID_MYSQL_DEBUG="",
+    ORCHID_DYNAMODB_REGION="",
+    ORCHID_DYNAMODB_NOTIFICATION_TABLE="",
+    ORCHID_SQS_REGION="",
+    ORCHID_SQS_QUEUE_URL="",
+    ORCHID_PARALLEL=10
