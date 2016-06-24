@@ -26,8 +26,8 @@ fi
 #
 repository=orchid
 bundle=$version.tar.gz
-src_folder="$repository-$version"
-deploy_folder="deploy-$version"
+src_folder=$(pwd)/$repository-$version
+deploy_folder=$(pwd)/deploy-$version
 
 wget https://github.com/theKono/$repository/archive/$bundle
 tar xf $bundle
@@ -37,7 +37,17 @@ mkdir -p $deploy_folder
 #
 # Build
 #
-go build -v -o $deploy_folder/worker -tags "notification" $src_folder/cmd/notification/main.go || { echo "Compile error"; exit 1; }
+new_gopath=$(pwd)/workspace
+export GOPATH=$new_gopath
+mkdir -p $new_gopath/src/github.com/theKono
+mv $src_folder $new_gopath/src/github.com/theKono/orchid
+src_folder=$new_gopath/src/github.com/theKono/orchid
+pushd .
+cd $src_folder
+glide install
+go build -v -o $deploy_folder/worker -tags "notification" cmd/notification/main.go || { echo "Compile error"; exit 1; }
+popd
+rm -rf $new_gopath
 
 #
 # Prepare stuffs for AWS CodeDeploy
@@ -55,7 +65,7 @@ key=notification/$revision
 
 tar zcvf $revision -C $deploy_folder .
 aws s3 cp $revision s3://$bucket/$key
-rm -rf $src_folder $deploy_folder $revision
+rm -rf $deploy_folder $revision
 
 #
 # Deploy
