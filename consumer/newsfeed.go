@@ -29,6 +29,8 @@ var consumeNewsFeedMessage = func(message *awsSqs.Message) error {
 
 	defer sqs.DeleteMessage(message)
 
+	log.Println("Receive message: ", *message.Body)
+
 	if newsFeed, err = messagejson.NewNewsFeed(message.Body); err != nil {
 		log.Println("Cannot parse news feed message\n", err)
 		return err
