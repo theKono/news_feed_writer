@@ -5,6 +5,9 @@ package messagejson
 import (
 	"encoding/json"
 	"log"
+	"time"
+
+	"github.com/theKono/orchid/util"
 )
 
 // Notification is used to deserialize JSON message from SQS.
@@ -18,6 +21,8 @@ type Notification struct {
 // JSON string and validates the NewsFeed instance. If the validation
 // fails, error will be returned.
 var NewNotification = func(jsonStr *string) (*Notification, error) {
+	defer util.MeasureExecTime(time.Now(), "NewNotification")
+
 	n := new(Notification)
 
 	if err := json.Unmarshal([]byte(*jsonStr), n); err != nil {

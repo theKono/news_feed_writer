@@ -5,6 +5,9 @@ package messagejson
 import (
 	"encoding/json"
 	"log"
+	"time"
+
+	"github.com/theKono/orchid/util"
 )
 
 // Timeline is used to deserialize JSON message from SQS.
@@ -18,6 +21,8 @@ type Timeline struct {
 // string and validates the Timeline instance. If the validation
 // fails, error will be returned.
 var NewTimeline = func(jsonStr *string) (*Timeline, error) {
+	defer util.MeasureExecTime(time.Now(), "NewTimeline")
+
 	nf := new(Timeline)
 
 	if err := json.Unmarshal([]byte(*jsonStr), nf); err != nil {
