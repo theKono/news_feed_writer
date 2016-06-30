@@ -1,6 +1,7 @@
 package util
 
 import (
+	"log"
 	"math/rand"
 	"time"
 )
@@ -25,4 +26,13 @@ func GenerateID(shard int) int64 {
 	ret += int64(rand.New(rand.NewSource(t)).Intn(maxRandom))
 
 	return ret
+}
+
+// MeasureExecTime measures the duration from beginAt.
+//
+// It is useful to be a defer statment.
+func MeasureExecTime(beginAt time.Time, name string) time.Duration {
+	duration := time.Since(beginAt)
+	log.Printf("%v took %s\n", name, duration)
+	return duration
 }

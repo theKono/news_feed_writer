@@ -23,3 +23,16 @@ func TestGenerateID(t *testing.T) {
 		t.Fatalf("Expect shard to be `%v`, but got `%v`", shard, s)
 	}
 }
+
+func TestMeasureExecTime(t *testing.T) {
+	targetFn := func() time.Duration {
+		now := time.Now()
+		time.Sleep(10 * time.Millisecond)
+		return MeasureExecTime(now, "targetFn")
+	}
+
+	execTime := targetFn()
+	if execTime-10*time.Millisecond >= time.Millisecond {
+		t.Fatalf("Expect execTime to < 0.001 sec, but got `%v`", execTime-10*time.Millisecond)
+	}
+}
