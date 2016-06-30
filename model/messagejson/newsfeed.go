@@ -5,6 +5,9 @@ package messagejson
 import (
 	"encoding/json"
 	"log"
+	"time"
+
+	"github.com/theKono/orchid/util"
 )
 
 // NewsFeed is used to deserialize JSON message from SQS.
@@ -18,6 +21,8 @@ type NewsFeed struct {
 // string and validates the NewsFeed instance. If the validation
 // fails, error will be returned.
 var NewNewsFeed = func(jsonStr *string) (*NewsFeed, error) {
+	defer util.MeasureExecTime(time.Now(), "NewNewsFeed")
+
 	nf := new(NewsFeed)
 
 	if err := json.Unmarshal([]byte(*jsonStr), nf); err != nil {
