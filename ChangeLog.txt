@@ -1,3 +1,9 @@
+1.0.0-rc4 / 2016-06-30
+----------------------
+* Log MySQL time.
+* Log DynamoDB time.
+* Log JSON parser time.
+
 1.0.0-rc3 / 2016-06-29
 ----------------------
 * Log SQS message body.
