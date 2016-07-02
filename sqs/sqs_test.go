@@ -99,11 +99,12 @@ func TestPopulate(t *testing.T) {
 	}
 }
 
-func TestWaitDone(t *testing.T) {
+func Test_Wait_RegisterWaitGroup_Done(t *testing.T) {
 	var worker string
 	var supervisor string
 
 	go func() {
+		registerWaitGroup()
 		worker = "sleeping"
 		time.Sleep(10 * time.Millisecond)
 		worker = "done"
