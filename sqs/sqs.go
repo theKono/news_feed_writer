@@ -2,6 +2,7 @@ package sqs
 
 import (
 	"log"
+	"sync"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -12,7 +13,7 @@ import (
 
 // DefaultNumberOfMessages is the default value for max number of
 // messages to return.
-const DefaultNumberOfMessages = 10
+const DefaultNumberOfMessages = 1
 
 // DefaultWaitTimeSeconds is the default value for duration for which
 // the call will wait for a message to arrive.
@@ -28,8 +29,8 @@ var queueURL string
 // keep recieving message from SQS
 var keepPolling bool
 
-// waitCh is used by wait(), done()
-var waitCh chan bool
+// wg is used by wait(), registerWaitGroup(), done()
+var wg *sync.WaitGroup
 
 // New initializes package variables.
 func init() {
@@ -43,13 +44,15 @@ func init() {
 	service = awsSqs.New(session.New(), aws.NewConfig().WithRegion(cfg.SqsRegion))
 	queueURL = cfg.SqsQueueURL
 	keepPolling = false
-	waitCh = make(chan bool, 1) // don't block
+	wg = new(sync.WaitGroup)
 }
 
 // Start makes it start to poll SQS.
 func Start(output chan<- *awsSqs.Message) error {
 	keepPolling = true
-	go poll(output)
+	for i := 0; i < cfg.Parallel; i++ {
+		go poll(output)
+	}
 	return nil
 }
 
@@ -74,6 +77,9 @@ var DeleteMessage = func(message *awsSqs.Message) (err error) {
 // poll repeatedly waits and receives messages from SQS.
 // It is the main go routine.
 var poll = func(output chan<- *awsSqs.Message) {
+	registerWaitGroup()
+	defer done()
+
 	params := makeReceiveMessageInput()
 
 	for keepPolling {
@@ -86,8 +92,6 @@ var poll = func(output chan<- *awsSqs.Message) {
 
 		populate(resp.Messages, output)
 	}
-
-	done()
 }
 
 // makeReceiveMessageInput makes the parameter to poll SQS.
@@ -112,12 +116,17 @@ var populate = func(messages []*awsSqs.Message, output chan<- *awsSqs.Message) {
 	}
 }
 
-// wait is used to wait go routine poll() to finish.
+// wait is used to block until all goroutines in wait group are done.
 var wait = func() {
-	<-waitCh
+	wg.Wait()
 }
 
-// done is used to notify that poll() is finished.
+// registerWaitGroup is used by a goroutine that wants to be a member of wait group.
+var registerWaitGroup = func() {
+	wg.Add(1)
+}
+
+// done is used by a goroutine that disclaims it is done.
 var done = func() {
-	waitCh <- true
+	wg.Done()
 }
