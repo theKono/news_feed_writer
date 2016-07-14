@@ -191,36 +191,6 @@ func TestConsumeNewsFeedMessage(t *testing.T) {
 		}
 	}()
 
-	// When insertIntoMysql fails
-	func() {
-		var arg mysql.Sharder
-		var mjNewsFeed = &messagejson.NewsFeed{}
-		var msNewsFeed = &mysql.NewsFeed{}
-		var dyPutItemInput = &dynamodb.PutItemInput{}
-
-		mockMessagejsonNewNewsFeed(mjNewsFeed)
-		mockMysqlNewNewsFeed(msNewsFeed)
-		mockDynamoNewNewsFeed(dyPutItemInput)
-		insertIntoMysql = func(nf mysql.Sharder) error {
-			arg = nf
-			return errors.New("")
-		}
-		defer restoreFunctions()
-
-		callDeleteMessage = false
-		if consumeNewsFeedMessage(&message) == nil {
-			t.Fatal("Expect consumeNewsFeedMessage() to return error")
-		}
-
-		if arg != msNewsFeed {
-			t.Fatal("insertIntoMysql recevied wrong parameter")
-		}
-
-		if !callDeleteMessage {
-			t.Fatal("Expect sqs.DeleteMessage to be called")
-		}
-	}()
-
 	// When insertIntoDynamoDB fails
 	func() {
 		var arg *dynamodb.PutItemInput
@@ -231,9 +201,6 @@ func TestConsumeNewsFeedMessage(t *testing.T) {
 		mockMessagejsonNewNewsFeed(mjNewsFeed)
 		mockMysqlNewNewsFeed(msNewsFeed)
 		mockDynamoNewNewsFeed(dyPutItemInput)
-		insertIntoMysql = func(nf mysql.Sharder) error {
-			return nil
-		}
 		insertIntoDynamoDB = func(pii *dynamodb.PutItemInput) error {
 			arg = pii
 			return errors.New("")
@@ -247,6 +214,39 @@ func TestConsumeNewsFeedMessage(t *testing.T) {
 
 		if arg != dyPutItemInput {
 			t.Fatal("insertIntoDynamoDB recevied wrong parameter")
+		}
+
+		if !callDeleteMessage {
+			t.Fatal("Expect sqs.DeleteMessage to be called")
+		}
+	}()
+
+	// When insertIntoMysql fails
+	func() {
+		var arg mysql.Sharder
+		var mjNewsFeed = &messagejson.NewsFeed{}
+		var msNewsFeed = &mysql.NewsFeed{}
+		var dyPutItemInput = &dynamodb.PutItemInput{}
+
+		mockMessagejsonNewNewsFeed(mjNewsFeed)
+		mockMysqlNewNewsFeed(msNewsFeed)
+		mockDynamoNewNewsFeed(dyPutItemInput)
+		insertIntoDynamoDB = func(pii *dynamodb.PutItemInput) error {
+			return nil
+		}
+		insertIntoMysql = func(nf mysql.Sharder) error {
+			arg = nf
+			return errors.New("")
+		}
+		defer restoreFunctions()
+
+		callDeleteMessage = false
+		if consumeNewsFeedMessage(&message) == nil {
+			t.Fatal("Expect consumeNewsFeedMessage() to return error")
+		}
+
+		if arg != msNewsFeed {
+			t.Fatal("insertIntoMysql recevied wrong parameter")
 		}
 
 		if !callDeleteMessage {
@@ -345,36 +345,6 @@ func TestConsumeNotificationMessage(t *testing.T) {
 		}
 	}()
 
-	// When insertIntoMysql fails
-	func() {
-		var arg mysql.Sharder
-		var mjNotification = &messagejson.Notification{}
-		var msNotification = &mysql.Notification{}
-		var dyPutItemInput = &dynamodb.PutItemInput{}
-
-		mockMessagejsonNewNotification(mjNotification)
-		mockMysqlNewNotification(msNotification)
-		mockDynamoNewNotification(dyPutItemInput)
-		insertIntoMysql = func(nf mysql.Sharder) error {
-			arg = nf
-			return errors.New("")
-		}
-		defer restoreFunctions()
-
-		callDeleteMessage = false
-		if consumeNotificationMessage(&message) == nil {
-			t.Fatal("Expect consumeNotificationMessage() to return error")
-		}
-
-		if arg != msNotification {
-			t.Fatal("insertIntoMysql recevied wrong parameter")
-		}
-
-		if !callDeleteMessage {
-			t.Fatal("Expect sqs.DeleteMessage to be called")
-		}
-	}()
-
 	// When insertIntoDynamoDB fails
 	func() {
 		var arg *dynamodb.PutItemInput
@@ -385,9 +355,6 @@ func TestConsumeNotificationMessage(t *testing.T) {
 		mockMessagejsonNewNotification(mjNotification)
 		mockMysqlNewNotification(msNotification)
 		mockDynamoNewNotification(dyPutItemInput)
-		insertIntoMysql = func(nf mysql.Sharder) error {
-			return nil
-		}
 		insertIntoDynamoDB = func(pii *dynamodb.PutItemInput) error {
 			arg = pii
 			return errors.New("")
@@ -401,6 +368,39 @@ func TestConsumeNotificationMessage(t *testing.T) {
 
 		if arg != dyPutItemInput {
 			t.Fatal("insertIntoDynamoDB recevied wrong parameter")
+		}
+
+		if !callDeleteMessage {
+			t.Fatal("Expect sqs.DeleteMessage to be called")
+		}
+	}()
+
+	// When insertIntoMysql fails
+	func() {
+		var arg mysql.Sharder
+		var mjNotification = &messagejson.Notification{}
+		var msNotification = &mysql.Notification{}
+		var dyPutItemInput = &dynamodb.PutItemInput{}
+
+		mockMessagejsonNewNotification(mjNotification)
+		mockMysqlNewNotification(msNotification)
+		mockDynamoNewNotification(dyPutItemInput)
+		insertIntoDynamoDB = func(pii *dynamodb.PutItemInput) error {
+			return nil
+		}
+		insertIntoMysql = func(nf mysql.Sharder) error {
+			arg = nf
+			return errors.New("")
+		}
+		defer restoreFunctions()
+
+		callDeleteMessage = false
+		if consumeNotificationMessage(&message) == nil {
+			t.Fatal("Expect consumeNotificationMessage() to return error")
+		}
+
+		if arg != msNotification {
+			t.Fatal("insertIntoMysql recevied wrong parameter")
 		}
 
 		if !callDeleteMessage {
@@ -499,36 +499,6 @@ func TestConsumeTimelineMessage(t *testing.T) {
 		}
 	}()
 
-	// When insertIntoMysql fails
-	func() {
-		var arg mysql.Sharder
-		var mjTimeline = &messagejson.Timeline{}
-		var msTimeline = &mysql.Timeline{}
-		var dyPutItemInput = &dynamodb.PutItemInput{}
-
-		mockMessagejsonNewTimeline(mjTimeline)
-		mockMysqlNewTimeline(msTimeline)
-		mockDynamoNewTimeline(dyPutItemInput)
-		insertIntoMysql = func(nf mysql.Sharder) error {
-			arg = nf
-			return errors.New("")
-		}
-		defer restoreFunctions()
-
-		callDeleteMessage = false
-		if consumeTimelineMessage(&message) == nil {
-			t.Fatal("Expect consumeTimelineMessage() to return error")
-		}
-
-		if arg != msTimeline {
-			t.Fatal("insertIntoMysql recevied wrong parameter")
-		}
-
-		if !callDeleteMessage {
-			t.Fatal("Expect sqs.DeleteMessage to be called")
-		}
-	}()
-
 	// When insertIntoDynamoDB fails
 	func() {
 		var arg *dynamodb.PutItemInput
@@ -539,9 +509,6 @@ func TestConsumeTimelineMessage(t *testing.T) {
 		mockMessagejsonNewTimeline(mjTimeline)
 		mockMysqlNewTimeline(msTimeline)
 		mockDynamoNewTimeline(dyPutItemInput)
-		insertIntoMysql = func(nf mysql.Sharder) error {
-			return nil
-		}
 		insertIntoDynamoDB = func(pii *dynamodb.PutItemInput) error {
 			arg = pii
 			return errors.New("")
@@ -555,6 +522,39 @@ func TestConsumeTimelineMessage(t *testing.T) {
 
 		if arg != dyPutItemInput {
 			t.Fatal("insertIntoDynamoDB recevied wrong parameter")
+		}
+
+		if !callDeleteMessage {
+			t.Fatal("Expect sqs.DeleteMessage to be called")
+		}
+	}()
+
+	// When insertIntoMysql fails
+	func() {
+		var arg mysql.Sharder
+		var mjTimeline = &messagejson.Timeline{}
+		var msTimeline = &mysql.Timeline{}
+		var dyPutItemInput = &dynamodb.PutItemInput{}
+
+		mockMessagejsonNewTimeline(mjTimeline)
+		mockMysqlNewTimeline(msTimeline)
+		mockDynamoNewTimeline(dyPutItemInput)
+		insertIntoDynamoDB = func(pii *dynamodb.PutItemInput) error {
+			return nil
+		}
+		insertIntoMysql = func(nf mysql.Sharder) error {
+			arg = nf
+			return errors.New("")
+		}
+		defer restoreFunctions()
+
+		callDeleteMessage = false
+		if consumeTimelineMessage(&message) == nil {
+			t.Fatal("Expect consumeTimelineMessage() to return error")
+		}
+
+		if arg != msTimeline {
+			t.Fatal("insertIntoMysql recevied wrong parameter")
 		}
 
 		if !callDeleteMessage {

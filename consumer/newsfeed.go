@@ -44,11 +44,11 @@ var consumeNewsFeedMessage = func(message *awsSqs.Message) error {
 		return err
 	}
 
-	if err = insertIntoMysql(record); err != nil {
+	if err = insertIntoDynamoDB(doc); err != nil {
 		return err
 	}
 
-	if err = insertIntoDynamoDB(doc); err != nil {
+	if err = insertIntoMysql(record); err != nil {
 		return err
 	}
 
