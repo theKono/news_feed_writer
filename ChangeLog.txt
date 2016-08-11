@@ -1,3 +1,7 @@
+1.1.0 / 2016-08-11
+------------------
+* Will not insert message into MySQL anymore.
+
 1.0.1 / 2016-07-14
 ------------------
 * Insert into Dynamodb before MySQL. We are going to populate old data into
