@@ -12,12 +12,6 @@ It is a microservice Kono used to create news feed, notifications, timeline unit
 Orchid uses configuration from environment variables. All environment variables start with `ORCHID_` prefix. We list the required and optional environment variable for each executable.
 
 ### bin/newsfeed-writer
-- `ORCHID_MYSQL_MAIN`
-    - The first MySQL database shard. The news feed record will be inserted into the `newsfeeds` table of the database. It conforms to GO's MySQL specific data source name.
-    - E.g. `user:password@tcp(locahost:3306)/database?charset=utf8&parseTime=True&loc=Local`
-- `ORCHID_MYSQL_SHARD`
-    - The second MySQL database shard. The news feed record will be inserted into the `newsfeeds` table of the database. It conforms to GO's MySQL specific data source name.
-    - E.g. `user:password@tcp(locahost:3306)/database?charset=utf8&parseTime=True&loc=Local`
 - `ORCHID_DYNAMODB_REGION`
     - It specifies the AWS DynamoDB resource region. See `ORCHID_DYNAMODB_NEWS_FEED_TABLE`.
 - `ORCHID_DYNAMODB_NEWS_FEED_TABLE`
@@ -28,16 +22,8 @@ Orchid uses configuration from environment variables. All environment variables 
     - The URL of the AWS SQS queue. The workers will compete news feed data from the AWS SQS queue.
 - `ORCHID_PARALLEL`
     - It specifies the number of worker to activate. The workers will compete message from AWS SQS queue.
-- `ORCHID_MYSQL_DEBUG` (optional)
-    - To log advanced MySQL statment for debugging, set it to `1`.
 
 ### bin/notification-writer
-- `ORCHID_MYSQL_MAIN`
-    - The first MySQL database shard. The notification record will be inserted into the `notifications` table of the database. It conforms to GO's MySQL specific data source name.
-    - E.g. `user:password@tcp(locahost:3306)/database?charset=utf8&parseTime=True&loc=Local`
-- `ORCHID_MYSQL_SHARD`
-    - The second MySQL database shard. The notification record will be inserted into the `notifications` table of the database. It conforms to GO's MySQL specific data source name.
-    - E.g. `user:password@tcp(locahost:3306)/database?charset=utf8&parseTime=True&loc=Local`
 - `ORCHID_DYNAMODB_REGION`
     - It specifies the AWS DynamoDB resource region. See `ORCHID_DYNAMODB_NOTIFICATION_TABLE`.
 - `ORCHID_DYNAMODB_NOTIFICATION_TABLE`
@@ -48,16 +34,8 @@ Orchid uses configuration from environment variables. All environment variables 
     - The URL of the AWS SQS queue. The workers will compete notification data from the AWS SQS queue.
 - `ORCHID_PARALLEL`
     - It specifies the number of worker to activate. The workers will compete message from AWS SQS queue.
-- `ORCHID_MYSQL_DEBUG` (optional)
-    - To log advanced MySQL statment for debugging, set it to `1`.
 
 ### bin/timeline-writer
-- `ORCHID_MYSQL_MAIN`
-    - The first MySQL database shard. The timeline record will be inserted into the `timelines` table of the database. It conforms to GO's MySQL specific data source name.
-    - E.g. `user:password@tcp(locahost:3306)/database?charset=utf8&parseTime=True&loc=Local`
-- `ORCHID_MYSQL_SHARD`
-    - The second MySQL database shard. The timeline record will be inserted into the `timelines` table of the database. It conforms to GO's MySQL specific data source name.
-    - E.g. `user:password@tcp(locahost:3306)/database?charset=utf8&parseTime=True&loc=Local`
 - `ORCHID_DYNAMODB_REGION`
     - It specifies the AWS DynamoDB resource region. See `ORCHID_DYNAMODB_TIMELINE_TABLE`.
 - `ORCHID_DYNAMODB_TIMELINE_TABLE`
@@ -68,14 +46,9 @@ Orchid uses configuration from environment variables. All environment variables 
     - The URL of the AWS SQS queue. The workers will compete timeline data from the AWS SQS queue.
 - `ORCHID_PARALLEL`
     - It specifies the number of worker to activate. The workers will compete message from AWS SQS queue.
-- `ORCHID_MYSQL_DEBUG` (optional)
-    - To log advanced MySQL statment for debugging, set it to `1`.
 
 ## Unit Test
 ```bash
-ORCHID_MYSQL_MAIN=... \
-ORCHID_MYSQL_SHARD=... \
-ORCHID_MYSQL_DEBUG=1 \
 ORCHID_DYNAMODB_REGION=... \
 ORCHID_DYNAMODB_NEWS_FEED_TABLE=... \
 ORCHID_DYNAMODB_NOTIFICATION_TABLE=... \
@@ -86,9 +59,6 @@ go test -v -cover -tags "unit newsfeed notification timeline"
 
 ## Integration Test
 ```bash
-ORCHID_MYSQL_MAIN=... \
-ORCHID_MYSQL_SHARD=... \
-ORCHID_MYSQL_DEBUG=1 \
 ORCHID_DYNAMODB_REGION=... \
 ORCHID_DYNAMODB_NEWS_FEED_TABLE=... \
 ORCHID_DYNAMODB_NOTIFICATION_TABLE=... \
