@@ -16,8 +16,7 @@ import (
 // consumeNewsFeedMessage is the a NewsFeed consumer.
 //
 // It deletes the SQS message regardless of its validity. If it is a
-// valid message, then it will insert the NewsFeed both into MySQL and
-// DynamoDB.
+// valid message, then it will insert the NewsFeed both into DynamoDB.
 var consumeNewsFeedMessage = func(message *awsSqs.Message) error {
 	var (
 		newsFeed *messagejson.NewsFeed

@@ -16,8 +16,7 @@ import (
 // consumeTimelineMessage is a Timeline consumer.
 //
 // It deletes the SQS message regardless of its validity. If it is a
-// valid message, then it will insert the Timeline both into MySQL and
-// DynamoDB.
+// valid message, then it will insert the Timeline both into DynamoDB.
 var consumeTimelineMessage = func(message *awsSqs.Message) error {
 	var (
 		newsFeed *messagejson.Timeline

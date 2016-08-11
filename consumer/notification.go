@@ -16,8 +16,7 @@ import (
 // consumeNotificationMessage is the a Notification consumer.
 //
 // It deletes the SQS message regardless of its validity. If it is a
-// valid message, then it will insert the Notification both into MySQL and
-// DynamoDB.
+// valid message, then it will insert the Notification both into DynamoDB.
 var consumeNotificationMessage = func(message *awsSqs.Message) error {
 	var (
 		newsFeed *messagejson.Notification
