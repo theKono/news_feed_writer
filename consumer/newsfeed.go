@@ -10,7 +10,6 @@ import (
 
 	"github.com/theKono/orchid/model/dynamo"
 	"github.com/theKono/orchid/model/messagejson"
-	"github.com/theKono/orchid/model/mysql"
 	"github.com/theKono/orchid/sqs"
 )
 
@@ -22,7 +21,6 @@ import (
 var consumeNewsFeedMessage = func(message *awsSqs.Message) error {
 	var (
 		newsFeed *messagejson.NewsFeed
-		record   *mysql.NewsFeed
 		doc      *dynamodb.PutItemInput
 		err      error
 	)
@@ -34,21 +32,12 @@ var consumeNewsFeedMessage = func(message *awsSqs.Message) error {
 		return err
 	}
 
-	if record, err = mysql.NewNewsFeed(newsFeed); err != nil {
-		log.Println("Cannot create news feed model\n", err)
-		return err
-	}
-
 	if doc, err = dynamo.NewNewsFeed(newsFeed); err != nil {
 		log.Println("Cannot create news feed dynamodb model\n", err)
 		return err
 	}
 
 	if err = insertIntoDynamoDB(doc); err != nil {
-		return err
-	}
-
-	if err = insertIntoMysql(record); err != nil {
 		return err
 	}
 
