@@ -12,46 +12,7 @@ import (
 
 	"github.com/theKono/orchid/model/dynamo"
 	"github.com/theKono/orchid/model/messagejson"
-	"github.com/theKono/orchid/model/mysql"
 )
-
-func TestInsertIntoMysql(t *testing.T) {
-	var msNewsFeed *mysql.NewsFeed
-	var mjNewsFeed *messagejson.NewsFeed
-	var record = mysql.NewsFeed{}
-
-	mjNewsFeed = &messagejson.NewsFeed{
-		messagejson.SocialFeed{UserID: 2, Summary: "{}"},
-	}
-	mjNewsFeed.GenerateID()
-	msNewsFeed, _ = mysql.NewNewsFeed(mjNewsFeed)
-	if err := insertIntoMysql(msNewsFeed); err != nil {
-		t.Fatal("Expect insertIntoMysql not to return error\n", err)
-	}
-
-	mysql.DBSessions[0].Where("newsfeed_id = ?", mjNewsFeed.ID).First(&record)
-	if record.NewsfeedID == 0 {
-		t.Fatal("Expect record exist")
-	} else {
-		mysql.DBSessions[0].Delete(&record)
-	}
-
-	mjNewsFeed = &messagejson.NewsFeed{
-		messagejson.SocialFeed{UserID: 1, Summary: "{}"},
-	}
-	mjNewsFeed.GenerateID()
-	msNewsFeed, _ = mysql.NewNewsFeed(mjNewsFeed)
-	if err := insertIntoMysql(msNewsFeed); err != nil {
-		t.Fatal("Expect insertIntoMysql not to return error\n", err)
-	}
-
-	mysql.DBSessions[1].Where("newsfeed_id = ?", mjNewsFeed.ID).First(&record)
-	if record.NewsfeedID == 0 {
-		t.Fatal("Expect record exist")
-	} else {
-		mysql.DBSessions[1].Delete(&record)
-	}
-}
 
 func TestInsertIntoDynamoDB(t *testing.T) {
 	mjNewsFeed := &messagejson.NewsFeed{
