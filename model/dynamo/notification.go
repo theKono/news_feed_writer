@@ -11,8 +11,10 @@ import (
 
 	"github.com/theKono/orchid/cfg"
 	"github.com/theKono/orchid/model/messagejson"
-	"github.com/theKono/orchid/model/mysql"
 )
+
+// UnseenAndUnread is the default value for NewsFeed.State.
+const UnseenAndUnread = 0
 
 var notificationTableName string
 
@@ -39,7 +41,7 @@ var NewNotification = func(n *messagejson.Notification) (p *dynamodb.PutItemInpu
 				S: aws.String(n.Summary),
 			},
 			"state": &dynamodb.AttributeValue{
-				N: aws.String(fmt.Sprint(mysql.UnseenAndUnread)),
+				N: aws.String(fmt.Sprint(UnseenAndUnread)),
 			},
 		},
 	}
